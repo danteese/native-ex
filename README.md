@@ -382,7 +382,7 @@ const styles = StyleSheet.create({
 ```
 
 
-## Lists 
+## Lists 
 
 ```jsx
 import React, { Component } from 'react'
@@ -449,5 +449,127 @@ const style = StyleSheet.create({
 })
 ```
 
-## Section Lists 
+## Section Lists 
+
+```jsx
+import React, { Component } from 'react'
+import { SectionList, Text, StyleSheet } from 'react-native'
+
+const sections = [
+  {
+    id: 0,
+    title: 'Basic Components',
+    data: [
+      {id: 0, text: 'View'},
+      {id: 1, text: 'Text'},
+      {id: 2, text: 'Image'},
+    ]
+  },
+  {
+    id: 1,
+    title: 'List Components',
+    data: [
+      {id: 3, text: 'ScrollView'},
+      {id: 4, text: 'ListView'}
+    ]
+  }
+]
+
+const extractKey = ({id}) => id
+
+export default class App extends Component {
+
+  renderItem = ({item}) => {
+    return (
+      <Text style={styles.row}>
+        {item.text}
+      </Text>
+    )
+  }
+
+  renderSectionHeader = ({section}) => {
+    return (
+      <Text style={styles.header}>
+        {section.title}
+      </Text>
+    )
+  }
+
+  render() {
+    return (
+      <SectionList
+        style={styles.container}
+        sections={sections}
+        renderItem={this.renderItem}
+        renderSectionHeader={this.renderSectionHeader}
+        keyExtractor={extractKey}
+      ></SectionList>
+    )
+  }
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
+  row: {
+    padding: 15,
+    marginBottom: 5,
+    backgroundColor: 'skyblue'
+  },
+  header: {
+    padding: 15,
+    marginBottom: 5,
+    backgroundColor: 'steelblue',
+    color: 'white',
+    fontWeight: 'bold'
+  }
+})
+```
+
+## State Component
+
+In `State_Component` folder.
+
+## Redux
+
+```jsx
+import { Text } from 'react-native'
+import { createStore } from 'redux'
+
+
+// Define action types
+const types = {
+    INCREMENT: 'INCREMENT',
+}
+
+// Define a reducer 
+const reducer = (state, action) => {
+    if (action.type === types.INCREMENT) {
+        return {count: state.count + 1}
+    }
+    return state
+}
+
+// Define the initial state of our store
+const initialState = {count: 0}
+
+// Create a store, passing our reducer function and our initial state
+const store = createStore(reducer, initialState)
+
+
+// Redux Ready 
+
+store.dispatch({type: types.INCREMENT})
+store.dispatch({type: types.INCREMENT})
+store.dispatch({type: types.INCREMENT})
+
+export default function App() {
+    return (
+        <Text>
+            {store.getState().count}
+        </Text>
+    )
+}
+```
 

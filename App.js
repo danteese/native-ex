@@ -1,73 +1,56 @@
-import React, { Component } from 'react'
-import { SectionList, Text, StyleSheet } from 'react-native'
+import React from 'react'
+import { View } from 'react-native'
 
-const sections = [
-  {
-    id: 0,
-    title: 'Basic Components',
-    data: [
-      {id: 0, text: 'View'},
-      {id: 1, text: 'Text'},
-      {id: 2, text: 'Image'},
-    ]
-  },
-  {
-    id: 1,
-    title: 'List Components',
-    data: [
-      {id: 3, text: 'ScrollView'},
-      {id: 4, text: 'ListView'}
-    ]
-  }
-]
+import { actionCreators } from './todoListRedux'
+import List from './List'
+import Input from './Input'
+import Title from './Title'
 
-const extractKey = ({id}) => id
+import store from './store'
 
-export default class App extends Component {
+export default class App extends React.Component { 
 
-  renderItem = ({item}) => {
-    return (
-      <Text style={styles.row}>
-        {item.text}
-      </Text>
-    )
-  }
+    state = {}
 
-  renderSectionHeader = ({section}) => {
-    return (
-      <Text style={styles.header}>
-        {section.title}
-      </Text>
-    )
-  }
+    componentWillMount() {
+        const {todos} = store.getState()
+        this.setState({todos})
 
-  render() {
-    return (
-      <SectionList
-        style={styles.container}
-        sections={sections}
-        renderItem={this.renderItem}
-        renderSectionHeader={this.renderSectionHeader}
-        keyExtractor={extractKey}
-      ></SectionList>
-    )
-  }
+        this.unsubscribe = store.subscribe(() => {
+            const {todos} = store.getState()
+            this.setState({todos})
+        })
+    }
+
+    componentWillUnmount() {
+        this.unsubscribe()
+    }
+
+    onAddTodo = (text) => {
+        store.dispatch(actionCreators.add(text))
+    }
+
+    onRemoveTodo = (index) => {
+        store.dispatch(actionCreators.remove(text))
+    }
+
+    render() {
+        const {todos} = this.state
+
+        return (
+            <View>
+                <Title>
+                    To-Do List
+                </Title>
+                <Input
+                    placeholder={'Type a todo, then hit enter'}
+                    onSubmitEditing={this.onAddTodo}>
+                </Input>
+                <List
+                    list={todos}
+                    onPressItem={this.onRemoveTodo}>
+                </List>
+            </View>
+        )
+    }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  row: {
-    padding: 15,
-    marginBottom: 5,
-    backgroundColor: 'skyblue'
-  },
-  header: {
-    padding: 15,
-    marginBottom: 5,
-    backgroundColor: 'steelblue',
-    color: 'white',
-    fontWeight: 'bold'
-  }
-})
