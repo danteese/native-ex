@@ -573,3 +573,14 @@ export default function App() {
 }
 ```
 
+
+## Redux Big Example
+
+The code is created from scratch, not using the React Bindings `Redux_Example`.
+
+## Redux with Bindings 
+
+Code in: `Redux_Bindings`. This example required extra work of finding the issues related with Expo and store 
+
+1. export the [connected()](https://stackoverflow.com/questions/41892553/could-not-find-store-in-either-the-context-or-props-of-connectapp)
+2. Using [index.js instead of App.js](https://stackoverflow.com/questions/49431013/react-native-app-js-index-js)
