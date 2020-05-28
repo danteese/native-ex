@@ -22,7 +22,9 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.danteese.natura",
+      "buildNumber": "1.0.0"
     }
   }
 }

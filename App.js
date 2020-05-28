@@ -1,61 +1,16 @@
-import React, { Component } from 'react'
-import { View, Text, AsyncStorage, StyleSheet } from 'react-native'
+import React from 'react'
+import thunk from 'redux-thunk'
+import { Provider } from 'react-redux'
 
-import Input from './Input'
+import { reducer } from './postRedux'
+import { createStore, applyMiddleware } from 'redux'
 
-const STORAGE_KEY = 'ASYNC_STORAGE_NAME_EXAMPLE'
+const store = createStore(reducer, applyMiddleware(thunk))
 
-export default class App extends Component {
+import Root from './Root'
 
-    state = {name: 'World'}
-    
-    componentWillMount() {
-        this.load()
-    }
-
-    load = async() => {
-        try{
-            const name = await AsyncStorage.getItem(STORAGE_KEY)
-
-            if (name !== null) {
-                this.setState({name})
-            }
-        } catch (e) {
-            console.error('Failed to load name')
-        }
-    }
-
-    save = async (name) => {
-        try {
-            await AsyncStorage.setItem(STORAGE_KEY, name)
-            
-            this.setState({name})
-        } catch (e) {
-            console.error('Failed to save name')
-        }
-    }
-
-    render () {
-        const {name} = this.state
-
-        return (
-            <View>
-                <Input 
-                   placeholder={'Type your name, hit enter, and refresh!'}
-                   onSubmitEditing={this.save}
-                   >
-                </Input>
-                <Text style={styles.text}>
-                    Hello {name}!
-                </Text>
-            </View>
-        )
-    }
-}
-
-const styles = StyleSheet.create({
-    text: {
-        padding: 15,
-        backgroundColor: 'skyblue'
-    }
-})
+export default () => (
+    <Provider store={store}>
+        <Root></Root>
+    </Provider>
+)
